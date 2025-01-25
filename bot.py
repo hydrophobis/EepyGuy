@@ -28,6 +28,12 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
+    channel = bot.get_channel(1332742802563530832)
+
+    if channel:
+        await channel.send("very eepy")
+    else:
+        print("Channel not found!")
 
 def get_public_ip():
     try:
