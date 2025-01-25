@@ -9,6 +9,14 @@ import time
 SERVER_VERSION = "Vanilla Java Edition 1.21.1"
 COMMAND_LIST = {'ip', 'version', 'hcommand', 'eepyhelp', 'refresh(do not run)'}
 
+# Load environment variables
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # Your GitHub Personal Access Token
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')  # Your Discord Bot Token
+
+# Check if tokens are loaded
+if not GITHUB_TOKEN or not DISCORD_TOKEN:
+    raise ValueError("Environment variables for GitHub token or Discord token are missing.")
+
 # Define the intents
 intents = discord.Intents.default()
 intents.message_content = True  # Enable message content intent if you need to read messages
@@ -73,7 +81,7 @@ async def refresh(ctx):
         # Define the GitHub URL and the output file name
         url = 'https://github.com/hydrophobis/EepyGuy/bot.py/?raw=true'  # Modify this URL
         headers = {
-            'Authorization': 'token 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'  # Replace with your GitHub token
+            'Authorization': f'token {GITHUB_TOKEN}'  # Use the environment variable for the token
         }
         
         # Make a GET request to download the file
@@ -107,4 +115,4 @@ async def refresh(ctx):
         await ctx.send(f"Failed to refresh and restart the bot: {e}")
 
 # Run the bot
-bot.run('MTI0NTUzNDEzNTE4Mzg2Nzk2NQ.Gpy--8.QJfKqH2YKa3Ingfr6RA64RcJNUU0Jgswkxj308')
+bot.run(DISCORD_TOKEN)  # Use the environment variable for the Discord bot token
