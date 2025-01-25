@@ -79,7 +79,7 @@ async def help(ctx):
 async def refresh(ctx):
     try:
         # Define the GitHub URL and the output file name
-        url = 'https://github.com/hydrophobis/EepyGuy/bot.py/?raw=true' 
+        url = 'https://raw.githubusercontent.com/hydrophobis/EepyGuy/refs/heads/main/bot.py' 
 
         # Make a GET request to download the file
         response = requests.get(url)
