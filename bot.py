@@ -111,5 +111,5 @@ async def refresh(ctx):
     except Exception as e:
         await ctx.send(f"Failed to refresh and restart the bot: {e}")
 
-# Run the bot
-bot.run(DISCORD_TOKEN)
+while(True):# Run the bot
+    bot.run(DISCORD_TOKEN)
