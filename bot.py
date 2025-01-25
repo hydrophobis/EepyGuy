@@ -65,7 +65,7 @@ def get_public_ip():
 @bot.command(name='ip')
 async def public_ip(ctx):
     # Get the IPv6 address and send it in the message
-    await ctx.send(get_public_ip() + "\n" + f"[{get_public_ip().trim()}]:25565".trim())
+    await ctx.send(get_public_ip() + "\n" + f"[{get_public_ip().strip()}]:25565".strip())
 
 # Command: !version
 @bot.command(name='version')
