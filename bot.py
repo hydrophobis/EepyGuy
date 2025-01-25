@@ -1,6 +1,10 @@
 import discord
-import subprocess
+import requests
 from discord.ext import commands
+import subprocess
+import os
+import sys
+import time
 
 SERVER_VERSION = "Vanilla Java Edition 1.21.1"
 COMMAND_LIST = {'ip', 'version', 'hcommand'}
@@ -58,9 +62,49 @@ async def version(ctx):
 async def hcommand(ctx): # Shows Windows and Linux install commands
     await ctx.send(f"Windows: runas /user:Administrator \"echo '{get_public_ip()} hydrophobis.mc' >> C:\Windows\System32\drivers\etc\hosts\"\nLinux: sudo echo '{get_public_ip()} hydrophobis.mc' >> /etc/hosts")
 
-@bit.command(name='help')
+@bot.command(name='eepyhelp')
 async def help(ctx):
     await ctx.send(COMMAND_LIST)
+    
+# Command: !refresh (new command)
+@bot.command(name='refresh')
+async def refresh(ctx):
+    try:
+        # Define the GitHub URL and the output file name
+        url = 'https://github.com/hydrophobis/EepyGuy/bot.py/?raw=true'  # Modify this URL
+        headers = {
+            'Authorization': 'token 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'  # Replace with your GitHub token
+        }
+        
+        # Make a GET request to download the file
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 200:
+            # Save the downloaded content to a file
+            with open('bot.py', 'wb') as f:
+                f.write(response.content)
+            
+            await ctx.send("Successfully refreshed and downloaded the latest version!")
+
+            # Optionally, you could extract the ZIP file here if needed
+            # Example of extracting the zip file:
+            # import zipfile
+            # with zipfile.ZipFile('repository.zip', 'r') as zip_ref:
+            #     zip_ref.extractall('path/to/extract/directory')
+
+            # Restart the bot
+            await ctx.send("Restarting the bot...")
+
+            # Give it a moment before restarting
+            time.sleep(2)
+
+            # Terminate the current bot instance and start a new one
+            os.execv(sys.executable, ['python'] + sys.argv)
+        else:
+            await ctx.send(f"Error refreshing: {response.status_code} - {response.text}")
+
+    except Exception as e:
+        await ctx.send(f"Failed to refresh and restart the bot: {e}")
 
 # Run the bot
 bot.run('MTI0NTUzNDEzNTE4Mzg2Nzk2NQ.Gpy--8.QJfKqH2YKa3Ingfr6RA64RcJNUU0Jgswkxj308')
