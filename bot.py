@@ -10,8 +10,8 @@ SERVER_VERSION = "Vanilla Java Edition 1.21.1"
 COMMAND_LIST = {'ip', 'version', 'hcommand', 'eepyhelp', 'refresh(do not run)'}
 
 # Load environment variables
-GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # Your GitHub Personal Access Token
-DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')  # Your Discord Bot Token
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
 # Check if tokens are loaded
 if not GITHUB_TOKEN or not DISCORD_TOKEN:
@@ -19,7 +19,7 @@ if not GITHUB_TOKEN or not DISCORD_TOKEN:
 
 # Define the intents
 intents = discord.Intents.default()
-intents.message_content = True  # Enable message content intent if you need to read messages
+intents.message_content = True
 
 # Create a bot instance with a command prefix and intents
 bot = commands.Bot(command_prefix='!', intents=intents)
@@ -79,9 +79,9 @@ async def help(ctx):
 async def refresh(ctx):
     try:
         # Define the GitHub URL and the output file name
-        url = 'https://github.com/hydrophobis/EepyGuy/bot.py/?raw=true'  # Modify this URL
+        url = 'https://github.com/hydrophobis/EepyGuy/bot.py/?raw=true' 
         headers = {
-            'Authorization': f'token {GITHUB_TOKEN}'  # Use the environment variable for the token
+            'Authorization': f'token {GITHUB_TOKEN}'
         }
         
         # Make a GET request to download the file
@@ -93,12 +93,6 @@ async def refresh(ctx):
                 f.write(response.content)
             
             await ctx.send("Successfully refreshed and downloaded the latest version!")
-
-            # Optionally, you could extract the ZIP file here if needed
-            # Example of extracting the zip file:
-            # import zipfile
-            # with zipfile.ZipFile('repository.zip', 'r') as zip_ref:
-            #     zip_ref.extractall('path/to/extract/directory')
 
             # Restart the bot
             await ctx.send("Restarting the bot...")
@@ -115,4 +109,4 @@ async def refresh(ctx):
         await ctx.send(f"Failed to refresh and restart the bot: {e}")
 
 # Run the bot
-bot.run(DISCORD_TOKEN)  # Use the environment variable for the Discord bot token
+bot.run(DISCORD_TOKEN)
