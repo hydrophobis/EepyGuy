@@ -7,7 +7,7 @@ import sys
 import time
 
 SERVER_VERSION = "Vanilla Java Edition 1.21.1"
-COMMAND_LIST = {'ip', 'version', 'hcommand'}
+COMMAND_LIST = {'ip', 'version', 'hcommand', 'eepyhelp', 'refresh(do not run)'}
 
 # Define the intents
 intents = discord.Intents.default()
