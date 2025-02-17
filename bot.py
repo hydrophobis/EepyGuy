@@ -51,7 +51,7 @@ def get_public_ip():
 @bot.command(name='start')
 async def start(ctx):
     subprocess.run(['taskkill', '/F', '/IM', 'cmd.exe'])
-    subprocess.run(['cmd', '/c', 'start', 'C:/Vanilla 1.21.1/run.bat'])
+    subprocess.run(['start', 'C:\\Vanilla 1.21.1\\run.bat'])
     await refresh(ctx)
 
 # Command: !ip
@@ -93,7 +93,7 @@ async def refresh(ctx):
             time.sleep(2)
 
             # Terminate the current bot instance and start a new one
-            os.execv(sys.executable, ['python'] + sys.argv)
+            os.execv(sys.executable, ['python', '"C:\\Vanilla 1.21.1\\run_bot.py"'] + sys.argv)
         else:
             await ctx.send(f"Error refreshing: {response.status_code} - {response.text}")
 
