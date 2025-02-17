@@ -24,17 +24,6 @@ intents.message_content = True
 # Create a bot instance with a command prefix and intents
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-# Event: On bot ready
-@bot.event
-async def on_ready():
-    print(f'Logged in as {bot.user.name}')
-    channel = bot.get_channel(1332742802563530832)
-
-    if channel:
-        await channel.send("very eepy")
-    else:
-        print("Channel not found!")
-
 def get_public_ip():
     try:
         # Run ipconfig and use findstr to search for 'IPv6 Address'
@@ -60,6 +49,11 @@ def get_public_ip():
     except Exception as e:
         return f"Error retrieving IP address: {e}"
 
+@bot.command(name='start')
+async def start(ctx):
+    subprocess.run(['taskkill', '/F', '/IM', 'cmd.exe'])
+    subprocess.run(['start', 'C:\\Vanilla 1.21.1\\run.bat'])
+    subprocess.run(['start', 'C:\\Vanilla 1.21.1\\set_env.bat'])
 
 # Command: !ip
 @bot.command(name='ip')
