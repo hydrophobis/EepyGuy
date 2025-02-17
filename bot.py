@@ -7,7 +7,6 @@ import sys
 import time
 
 SERVER_VERSION = "Vanilla Java Edition 1.21.1"
-COMMAND_LIST = {'ip', 'version', 'hcommand', 'eepyhelp', 'refresh(do not run)'}
 
 # Load environment variables
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
@@ -53,7 +52,7 @@ def get_public_ip():
 async def start(ctx):
     subprocess.run(['taskkill', '/F', '/IM', 'cmd.exe'])
     subprocess.run(['start', 'C:\\Vanilla 1.21.1\\run.bat'])
-    subprocess.run(['start', 'C:\\Vanilla 1.21.1\\set_env.bat'])
+    await refresh(ctx)
 
 # Command: !ip
 @bot.command(name='ip')
@@ -69,10 +68,6 @@ async def version(ctx):
 @bot.command(name='hcommand')
 async def hcommand(ctx): # Shows Windows and Linux install commands
     await ctx.send(f"Windows: runas /user:Administrator \"echo '{get_public_ip()} hydrophobis.mc' >> C:\Windows\System32\drivers\etc\hosts\"\nLinux: sudo echo '{get_public_ip()} hydrophobis.mc' >> /etc/hosts")
-
-@bot.command(name='eepyhelp')
-async def help(ctx):
-    await ctx.send(COMMAND_LIST)
     
 # Command: !refresh (new command)
 @bot.command(name='refresh')
@@ -104,6 +99,7 @@ async def refresh(ctx):
 
     except Exception as e:
         await ctx.send(f"Failed to refresh and restart the bot: {e}")
+
 
 while(True):# Run the bot
     bot.run(DISCORD_TOKEN)
