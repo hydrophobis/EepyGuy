@@ -52,7 +52,6 @@ def get_public_ip():
 async def start(ctx):
     subprocess.run(['taskkill', '/F', '/IM', 'cmd.exe'])
     subprocess.run(['cmd.exe', '/C', 'start', 'C:/Vanilla 1.21.1/run.bat'])
-    await refresh(ctx)
 
 # Command: !ip
 @bot.command(name='ip')
