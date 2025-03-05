@@ -6,7 +6,11 @@ import os
 import sys
 import time
 
-SERVER_VERSION = "Vanilla Java Edition 1.21.1"
+SERVER_VERSION = "Modded Java Edition 1.21.1"
+MOD_LIST = {
+    "Epic Knights", 
+    "Vic's Point Blank"
+}
 
 # Load environment variables
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
@@ -52,17 +56,18 @@ def get_public_ip():
 async def start(ctx):
     subprocess.run(['taskkill', '/F', '/IM', 'cmd.exe'])
     subprocess.run(['cmd.exe', '/C', 'start', 'C:/Vanilla 1.21.1/run.bat'])
+    os.execv(sys.executable, ['python', '"C:\\Vanilla 1.21.1\\run_bot.py"'] + sys.argv)
 
 # Command: !ip
 @bot.command(name='ip')
 async def public_ip(ctx):
     # Get the IPv6 address and send it in the message
-    await ctx.send(get_public_ip() + "\n" + f"[{get_public_ip().strip()}]:25565".strip())
+    await ctx.send("Java: technology-utilities.gl.joinmc.link" + "\nBedrock: page-evolution.gl.at.ply.gg:3043")
 
 # Command: !version
 @bot.command(name='version')
 async def version(ctx):
-    await ctx.send(SERVER_VERSION)
+    await ctx.send(SERVER_VERSION + "\n" + MOD_LIST)
     
 @bot.command(name='hcommand')
 async def hcommand(ctx): # Shows Windows and Linux install commands
