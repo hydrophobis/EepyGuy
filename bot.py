@@ -5,10 +5,11 @@ import asyncio
 
 # Configure
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
+GITHUB_TOKEN =os.getenv('GITHUB_TOKEN')
 
 # Ensure token exists
-if not DISCORD_TOKEN:
-    raise ValueError("Environmental variable for 'DISCORD_TOKEN' is missing.")
+if not GITHUB_TOKEN or not DISCORD_TOKEN:
+    raise ValueError("Environmental variable for 'DISCORD_TOKEN' or 'GITHUB_TOKEN' is missing.")
 
 # Define intents
 intents = discord.Intents.all()
