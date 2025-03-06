@@ -31,33 +31,26 @@ class Commands(commands.Cog):
         async def version(self, ctx):
             await ctx.respond(SERVER_VERSION + "\n" + MOD_LIST, ephemeral=True)
 
-        @commands.slash_command(description="Show installation commands")
-        async def hcommand(self, ctx):
-            await ctx.respond(f"Windows: runas /user:Administrator \"echo '{get_public_ip()} hydrophobis.mc' >> C:\Windows\System32\drivers\etc\hosts\"\nLinux: sudo echo '{get_public_ip()} hydrophobis.mc' >> /etc/hosts", ephemeral=True)
-
         @commands.slash_command(description="Refresh command")
         async def refresh(self, ctx):
             try:
-                url = "GITHUB_URL_HERE"
-                response = requests.get(url)
-
-                if response.status_code == 200:
-                    with open('bot.py', 'wb') as f:
-                        f.write(response.content)
-
-                    await ctx.send("Successfully refreshed and downloaded the latest version!")
-
-                    # Restart the bot
-                    await ctx.send("Restarting bot...")
-
-                    time.sleep(2)
-
-                    # Terminate the current bot instance and start a new one
-                    os.execv(sys.executable, ['python', '"C:\\Vanilla 1.21.1\\run_bot.py"'] + sys.argv)
+                repo_url = "https://github.com/hydrophobis/EepyGuy"
+                clone_dir = "C:/Vanilla 1.21.1/"
                 
-                else:
-                    await ctx.respond(f"Error refreshing: {response.status_code} - {response.text}", ephemeral=True)
-
+                subprocess.run(['git', 'clone', repo_url, clone_dir], check=True)
+        
+                await ctx.send(f"Successfully cloned the repository from {repo_url}!")
+        
+                await ctx.send("Restarting bot...")
+        
+                time.sleep(2)
+        
+                # Terminate the current bot instance and start a new one
+                os.execv(sys.executable, ['python', 'C:\\Vanilla 1.21.1\\run_bot.py'] + sys.argv)
+        
+            except subprocess.CalledProcessError as e:
+                await ctx.respond(f"Error refreshing: {e}", ephemeral=True)
+        
             except Exception as e:
                 await ctx.respond(f"Failed to refresh and restart the bot: {e}", ephemeral=True)
 
