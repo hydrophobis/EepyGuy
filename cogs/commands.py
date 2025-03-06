@@ -35,7 +35,7 @@ class Commands(commands.Cog):
         async def refresh(self, ctx):
             try:
                 repo_url = "https://github.com/hydrophobis/EepyGuy"
-                clone_dir = "C:/Vanilla 1.21.1/"
+                clone_dir = "C:\Users\MINI PC\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\"
                 
                 subprocess.run(['git', 'clone', repo_url, clone_dir], check=True)
         
