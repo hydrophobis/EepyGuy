@@ -6,6 +6,10 @@ import asyncio
 # Configure
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
+# Ensure token exists
+if not DISCORD_TOKEN:
+    raise ValueError("Environmental variable for 'DISCORD_TOKEN' is missing.")
+
 # Define intents
 intents = discord.Intents.all()
 intents.message_content = True
