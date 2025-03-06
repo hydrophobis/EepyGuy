@@ -19,7 +19,7 @@ class Commands(commands.Cog):
                 await ctx.defer()
                 subprocess.run(['taskkill', '/F', '/IM', 'cmd.exe'])
                 subprocess.run(['cmd.exe', '/C', 'start', 'C:/Vanilla 1.21.1/run.bat'])
-                os.execv(sys.executable, ['python', '"C:\\Vanilla 1.21.1\\run_bot.py'] + sys.argv)
+                os.execv(sys.executable, ['python', '"C:/Vanilla 1.21.1/run_bot.py'] + sys.argv)
             except Exception as e:
                 await ctx.respond(f"There was an error with the start command: {e}", ephemeral=True)
 
@@ -29,13 +29,13 @@ class Commands(commands.Cog):
 
         @commands.slash_command(description="Return server version")
         async def version(self, ctx):
-            await ctx.respond(SERVER_VERSION + "\n" + MOD_LIST, ephemeral=True)
+            await ctx.respond(SERVER_VERSION + "/n" + MOD_LIST, ephemeral=True)
 
         @commands.slash_command(description="Refresh command")
         async def refresh(self, ctx):
             try:
                 repo_url = "https://github.com/hydrophobis/EepyGuy"
-                clone_dir = "C:/Vanilla 1.21.1/"
+                clone_dir = "C:/Users/MINI PC/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup"
                 
                 subprocess.run(['git', 'clone', repo_url, clone_dir], check=True)
         
@@ -46,7 +46,7 @@ class Commands(commands.Cog):
                 time.sleep(2)
         
                 # Terminate the current bot instance and start a new one
-                os.execv(sys.executable, ['python', 'C:\\Vanilla 1.21.1\\run_bot.py'] + sys.argv)
+                os.execv(sys.executable, ['python', 'C:/Vanilla 1.21.1/run_bot.py'] + sys.argv)
         
             except subprocess.CalledProcessError as e:
                 await ctx.respond(f"Error refreshing: {e}", ephemeral=True)

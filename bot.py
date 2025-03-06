@@ -24,9 +24,9 @@ async def on_ready():
     print(f"Logged in as {bot.user}")
 
 # Load cogs from cogs directory
-def load_extensions():
+async def load_extensions():
     print("Loading cogs..")
-    for filename in os.listdir('./cogs'):
+    for filename in os.listdir('C:\\Users\\MINI PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\EepyGuy\\cogs'):
         if filename.endswith('.py'):
             try:
                 bot.load_extension(f'cogs.{filename[:-3]}')
@@ -37,7 +37,7 @@ def load_extensions():
 # Run bot
 async def main():
     async with bot:
-        load_extensions()
+        await load_extensions()
         await bot.start(DISCORD_TOKEN)
 
 if __name__ == "__main__":
