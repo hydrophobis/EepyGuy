@@ -1,109 +1,39 @@
 import discord
-import requests
 from discord.ext import commands
-import subprocess
 import os
-import sys
-import time
+import asyncio
 
-SERVER_VERSION = "Modded Java Edition 1.21.1"
-MOD_LIST = {
-    "Epic Knights", 
-    "Vic's Point Blank"
-}
-
-# Load environment variables
-GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
+# Configure
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
-# Check if tokens are loaded
-if not GITHUB_TOKEN or not DISCORD_TOKEN:
-    raise ValueError("Environment variables for GitHub token or Discord token are missing.")
-
-# Define the intents
-intents = discord.Intents.default()
+# Define intents
+intents = discord.Intents.all()
 intents.message_content = True
 
-# Create a bot instance with a command prefix and intents
-bot = commands.Bot(command_prefix='!', intents=intents)
+# Create bot instance
+bot = commands.Bot(command_prefix="!", intents=intents)
 
-def get_public_ip():
-    try:
-        # Run ipconfig and use findstr to search for 'IPv6 Address'
-        result = subprocess.run(['ipconfig'], capture_output=True, text=True)
-        
-        # Check if the ipconfig command was successful
-        if result.returncode != 0:
-            return "Error: Failed to execute ipconfig command."
+# Print statement to confirm bot is online 
+@bot.event
+async def on_ready():
+    print(f"Logged in as {bot.user}")
 
-        # Find the line containing 'IPv6 Address'
-        ipv6_line = None
-        for line in result.stdout.splitlines():
-            if "IPv6 Address" in line:
-                ipv6_line = line
-                break
-        # If we found the line with IPv6 address, extract the address
-        if ipv6_line:
-            ip_address = ipv6_line.replace("IPv6 Address. . . . . . . . . . . : ", "")
-            return ip_address
-        else:
-            return "IPv6 Address not found."
-            
-    except Exception as e:
-        return f"Error retrieving IP address: {e}"
+# Load cogs from cogs directory
+def load_extensions():
+    print("Loading cogs..")
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            try:
+                bot.load_extension(f'cogs.{filename[:-3]}')
+                print(f"cogs.{filename[:-3]} loaded")
+            except Exception as e:
+                print(f"Error loading cogs.{filename[:-3]}: {e}")
 
-@bot.command(name='start')
-async def start(ctx):
-    subprocess.run(['taskkill', '/F', '/IM', 'cmd.exe'])
-    subprocess.run(['cmd.exe', '/C', 'start', 'C:/Vanilla 1.21.1/run.bat'])
-    os.execv(sys.executable, ['python', '"C:\\Vanilla 1.21.1\\run_bot.py"'] + sys.argv)
+# Run bot
+async def main():
+    async with bot:
+        load_extensions()
+        await bot.start(DISCORD_TOKEN)
 
-# Command: !ip
-@bot.command(name='ip')
-async def public_ip(ctx):
-    # Get the IPv6 address and send it in the message
-    await ctx.send("Java: technology-utilities.gl.joinmc.link" + "\nBedrock: page-evolution.gl.at.ply.gg:3043")
-
-# Command: !version
-@bot.command(name='version')
-async def version(ctx):
-    await ctx.send(SERVER_VERSION + "\n" + MOD_LIST)
-    
-@bot.command(name='hcommand')
-async def hcommand(ctx): # Shows Windows and Linux install commands
-    await ctx.send(f"Windows: runas /user:Administrator \"echo '{get_public_ip()} hydrophobis.mc' >> C:\Windows\System32\drivers\etc\hosts\"\nLinux: sudo echo '{get_public_ip()} hydrophobis.mc' >> /etc/hosts")
-    
-# Command: !refresh (new command)
-@bot.command(name='refresh')
-async def refresh(ctx):
-    try:
-        # Define the GitHub URL and the output file name
-        url = 'https://raw.githubusercontent.com/hydrophobis/EepyGuy/refs/heads/main/bot.py' 
-
-        # Make a GET request to download the file
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            # Save the downloaded content to a file
-            with open('bot.py', 'wb') as f:
-                f.write(response.content)
-            
-            await ctx.send("Successfully refreshed and downloaded the latest version!")
-
-            # Restart the bot
-            await ctx.send("Restarting the bot...")
-
-            # Give it a moment before restarting
-            time.sleep(2)
-
-            # Terminate the current bot instance and start a new one
-            os.execv(sys.executable, ['python', '"C:\\Vanilla 1.21.1\\run_bot.py"'] + sys.argv)
-        else:
-            await ctx.send(f"Error refreshing: {response.status_code} - {response.text}")
-
-    except Exception as e:
-        await ctx.send(f"Failed to refresh and restart the bot: {e}")
-
-
-while(True):# Run the bot
-    bot.run(DISCORD_TOKEN)
+if __name__ == "__main__":
+    asyncio.run(main())
