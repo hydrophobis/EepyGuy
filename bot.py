@@ -5,7 +5,7 @@ import asyncio
 
 # Configure
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
-GITHUB_TOKEN =os.getenv('GITHUB_TOKEN')
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 
 # Ensure token exists
 if not GITHUB_TOKEN or not DISCORD_TOKEN:
@@ -26,10 +26,12 @@ async def on_ready():
 # Load cogs from cogs directory
 async def load_extensions():
     print("Loading cogs..")
-    for filename in os.listdir('C:\\Users\\MINI PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\EepyGuy\\cogs'):
+    cogs_path = 'C:\\Users\\MINI PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\EepyGuy\\cogs'
+    for filename in os.listdir(cogs_path):
         if filename.endswith('.py'):
             try:
-                bot.load_extension(f'cogs.{filename[:-3]}')
+                # Await the load_extension coroutine here
+                await bot.load_extension(f'cogs.{filename[:-3]}')
                 print(f"cogs.{filename[:-3]} loaded")
             except Exception as e:
                 print(f"Error loading cogs.{filename[:-3]}: {e}")
@@ -37,7 +39,7 @@ async def load_extensions():
 # Run bot
 async def main():
     async with bot:
-        await load_extensions()
+        await load_extensions()  # Await the load_extensions coroutine
         await bot.start(DISCORD_TOKEN)
 
 if __name__ == "__main__":

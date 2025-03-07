@@ -8,8 +8,7 @@ import time
 
 SERVER_VERSION = "Modded Java Edition 1.21.1"
 MOD_LIST = {
-    "Epic Knights", 
-    "Vic's Point Blank"
+    "Just Mob Heads"
 }
 
 # Load environment variables
@@ -67,42 +66,28 @@ async def public_ip(ctx):
 # Command: !version
 @bot.command(name='version')
 async def version(ctx):
-    await ctx.send(SERVER_VERSION + "\n" + MOD_LIST)
+    await ctx.send(SERVER_VERSION + "\nMods: " + MOD_LIST)
     
 @bot.command(name='hcommand')
 async def hcommand(ctx): # Shows Windows and Linux install commands
     await ctx.send(f"Windows: runas /user:Administrator \"echo '{get_public_ip()} hydrophobis.mc' >> C:\Windows\System32\drivers\etc\hosts\"\nLinux: sudo echo '{get_public_ip()} hydrophobis.mc' >> /etc/hosts")
     
-# Command: !refresh (new command)
-@bot.command(name='refresh')
-async def refresh(ctx):
+@bot.command(name='refresh' description="Refresh command")
+async def refresh(self, ctx):
     try:
-        # Define the GitHub URL and the output file name
-        url = 'https://raw.githubusercontent.com/hydrophobis/EepyGuy/refs/heads/main/bot.py' 
+        repo_url = "https://github.com/hydrophobis/EepyGuy"
+        clone_dir = "C:/Users/MINI PC/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup"
+        
+        subprocess.run(['git', 'clone', repo_url, clone_dir], check=True)
 
-        # Make a GET request to download the file
-        response = requests.get(url)
+        await ctx.send(f"Successfully cloned the repository from {repo_url}!")
 
-        if response.status_code == 200:
-            # Save the downloaded content to a file
-            with open('bot.py', 'wb') as f:
-                f.write(response.content)
-            
-            await ctx.send("Successfully refreshed and downloaded the latest version!")
+        await ctx.send("Restarting bot...")
 
-            # Restart the bot
-            await ctx.send("Restarting the bot...")
+        time.sleep(2)
 
-            # Give it a moment before restarting
-            time.sleep(2)
-
-            # Terminate the current bot instance and start a new one
-            os.execv(sys.executable, ['python', '"C:\\Vanilla 1.21.1\\run_bot.py"'] + sys.argv)
-        else:
-            await ctx.send(f"Error refreshing: {response.status_code} - {response.text}")
-
-    except Exception as e:
-        await ctx.send(f"Failed to refresh and restart the bot: {e}")
+        # Terminate the current bot instance and start a new one
+        os.execv(sys.executable, ['python', 'C:/Vanilla 1.21.1/run_bot.py'] + sys.argv)
 
 
 while(True):# Run the bot
