@@ -55,7 +55,7 @@ def get_public_ip():
 async def start(ctx):
     subprocess.run(['taskkill', '/F', '/IM', 'cmd.exe'])
     subprocess.run(['cmd.exe', '/C', 'start', 'C:/Vanilla 1.21.1/run.bat'])
-    os.execv(sys.executable, ['python', '"C:\\Vanilla 1.21.1\\run_bot.py"'] + sys.argv)
+    os.execv(sys.executable, ["python", "C:\\Users\\MINI PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\EepyGuy\\old_bot.py"] + sys.argv)
 
 # Command: !ip
 @bot.command(name='ip')
@@ -87,7 +87,7 @@ async def refresh(self, ctx):
         time.sleep(2)
 
         # Terminate the current bot instance and start a new one
-        os.execv(sys.executable, ['python', 'C:/Vanilla 1.21.1/run_bot.py'] + sys.argv)
+        os.execv(sys.executable, ['python', '["python", "C:\\Users\\MINI PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\EepyGuy\\old_bot.py"]'] + sys.argv)
 
 
 while(True):# Run the bot
