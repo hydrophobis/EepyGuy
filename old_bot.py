@@ -6,9 +6,9 @@ import os
 import sys
 import time
 
-SERVER_VERSION = "Modded Java Edition 1.21.1"
+SERVER_VERSION = "Vanilla Java Edition 1.21.4"
 MOD_LIST = {
-    "Just Mob Heads"
+    "NONE"
 }
 
 # Load environment variables
@@ -72,7 +72,7 @@ async def version(ctx):
 async def hcommand(ctx): # Shows Windows and Linux install commands
     await ctx.send(f"Windows: runas /user:Administrator \"echo '{get_public_ip()} hydrophobis.mc' >> C:\Windows\System32\drivers\etc\hosts\"\nLinux: sudo echo '{get_public_ip()} hydrophobis.mc' >> /etc/hosts")
     
-@bot.command(name='refresh' description="Refresh command")
+@bot.command(name='refresh')
 async def refresh(self, ctx):
     try:
         repo_url = "https://github.com/hydrophobis/EepyGuy"
