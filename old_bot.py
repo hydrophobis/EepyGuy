@@ -5,6 +5,8 @@ import subprocess
 import os
 import sys
 import time
+import psutil
+import getpass
 
 SERVER_VERSION = "Vanilla Java Edition 1.21.4"
 MOD_LIST = {
@@ -53,9 +55,33 @@ def get_public_ip():
 
 @bot.command(name='start')
 async def start(ctx):
-    subprocess.run(['taskkill', '/F', '/IM', 'cmd.exe'])
-    subprocess.run(['cmd.exe', '/C', 'start', 'C:/Vanilla 1.21.1/run.bat'])
-    os.execv(sys.executable, ["python", "C:\\Users\\MINI PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\EepyGuy\\old_bot.py"] + sys.argv)
+    ctx.send("Beginning restart process")
+    try:
+        # Get the current bot process ID (PID) and the current user's username
+        current_pid = os.getpid()
+        current_user = getpass.getuser()
+        print(f"Current User: {current_user}")
+        print(f"Current PID: {current_pid}")
+        
+        # Iterate over all processes
+        for proc in psutil.process_iter(['pid', 'name', 'username']):
+            try:
+                # Check if the process is owned by the current user and isn't the bot process
+                if proc.info['username'] == current_user and proc.info['pid'] != current_pid:
+                    print(f"Killing process {proc.info['pid']} - {proc.info['name']} owned by {proc.info['username']}")
+                    proc.kill()
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                pass  # Ignore processes that can't be killed or have disappeared
+                
+        # Run the startup.bat file
+        subprocess.run(['cmd.exe', '/C', 'start', 'C:/Users/MINI PC/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/startup.bat'])
+
+        # Kill the bot process itself
+        os._exit(0)  # Use os._exit() to terminate the bot process
+
+    except Exception as e:
+        await ctx.send(f"Error occurred: {e}")
+
 
 # Command: !ip
 @bot.command(name='ip')
@@ -67,28 +93,6 @@ async def public_ip(ctx):
 @bot.command(name='version')
 async def version(ctx):
     await ctx.send(SERVER_VERSION + "\nMods: " + MOD_LIST)
-    
-@bot.command(name='hcommand')
-async def hcommand(ctx): # Shows Windows and Linux install commands
-    await ctx.send(f"Windows: runas /user:Administrator \"echo '{get_public_ip()} hydrophobis.mc' >> C:\Windows\System32\drivers\etc\hosts\"\nLinux: sudo echo '{get_public_ip()} hydrophobis.mc' >> /etc/hosts")
-    
-@bot.command(name='refresh')
-async def refresh(self, ctx):
-    try:
-        repo_url = "https://github.com/hydrophobis/EepyGuy"
-        clone_dir = "C:/Users/MINI PC/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup"
-        
-        subprocess.run(['git', 'clone', repo_url, clone_dir], check=True)
-
-        await ctx.send(f"Successfully cloned the repository from {repo_url}!")
-
-        await ctx.send("Restarting bot...")
-
-        time.sleep(2)
-
-        # Terminate the current bot instance and start a new one
-        os.execv(sys.executable, ['python', '["python", "C:\\Users\\MINI PC\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\EepyGuy\\old_bot.py"]'] + sys.argv)
 
 
-while(True):# Run the bot
-    bot.run(DISCORD_TOKEN)
+bot.run(DISCORD_TOKEN)
